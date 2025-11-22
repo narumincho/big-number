@@ -7,7 +7,7 @@ Deno.serve(async (request) => {
   switch(new URL(request.url).pathname) {
     case "/":{
       const stream = await renderToReadableStream(<App />, {
-        bootstrapScripts: [hash.clientScriptHash],
+        bootstrapScripts: [`/${hash.clientScriptHash}`],
       });
       return new Response(stream, {
         headers: { "content-type": "text/html" },

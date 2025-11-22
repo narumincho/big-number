@@ -8,6 +8,11 @@ export function App() {
       <head>
         <title>巨大数ゲーム</title>
         <meta charSet="utf-8" />
+        <style>{`
+:root {
+  color-scheme: light dark;
+};
+`}</style>
       </head>
       <body>
         <div>
