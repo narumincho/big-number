@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "lib": ["deno.ns", "deno.unstable", "dom"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "tasks": {
+    "client-build": "deno run --check --unstable-bundle --allow-read=./generated --allow-write=./generated ./clientBuild.ts",
+    "start-watch": "deno run --check --watch --unstable-raw-imports --allow-env=NODE_ENV --allow-net ./main.tsx"
+  },
+  "imports": {
+    "@std/fs": "jsr:@std/fs@^1.0.20",
+    "@types/react": "npm:@types/react@^19.2.6",
+    "@types/react-dom": "npm:@types/react-dom@^19.2.3",
+    "react": "npm:react@^19.2.0",
+    "react-dom": "npm:react-dom@^19.2.0"
+  }
+}
