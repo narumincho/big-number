@@ -1,4 +1,4 @@
 import { hydrateRoot } from "react-dom/client";
 import { App } from "./app.tsx";
 
-hydrateRoot(document.documentElement, <App />);
+hydrateRoot(document.body, <App />);

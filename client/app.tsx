@@ -1,40 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function App() {
   const [star, setStar] = useState<number>(0);
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    setInitialized(true);
+  }, []);
 
   return (
-    <html>
-      <head>
-        <title>星を増やそうゲーム</title>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1"
-        />
-        <style>
-          {`
-:root {
-  color-scheme: dark;
-};
-`}
-        </style>
-      </head>
-      <body style={{ display: "grid", gap: 8, margin: 0, padding: 16 }}>
-        <h1 style={{ margin: 0, padding: 8 }}>星を増やそうゲーム</h1>
-        <div>とにかく⭐️を増やそう</div>
-        <StarBoxView star={star} />
-        <button
-          type="button"
-          style={{ padding: 4 }}
-          onClick={() => {
-            setStar((prev) => prev + 1);
-          }}
-        >
-          ⭐️ ← ⭐️ + 1
-        </button>
-      </body>
-    </html>
+    <>
+      <h1 style={{ margin: 0, padding: 8 }}>星を増やそうゲーム</h1>
+      <div>とにかく⭐️を増やそう</div>
+      <StarBoxView star={star} />
+      <button
+        type="button"
+        style={{ padding: 4 }}
+        disabled={!initialized}
+        onClick={() => {
+          setStar((prev) => prev + 1);
+        }}
+      >
+        ⭐️ ← ⭐️ + 1
+      </button>
+    </>
   );
 }
 
@@ -45,12 +34,14 @@ function StarBoxView({ star }: { readonly star: number }) {
 
   return (
     <div>
-      {star > 2 && (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <Chip>🔲🔲🔲</Chip>
-          <Chip>🔲: 123</Chip>
-        </div>
-      )}
+      <div style={{ minHeight: 34 }}>
+        {star > 2 && (
+          <div style={{ display: "flex", gap: "8px" }}>
+            <Chip>🔲🔲🔲</Chip>
+            <Chip>🔲: 123</Chip>
+          </div>
+        )}
+      </div>
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <StarView star={star} viewType={viewType} />
       </div>
@@ -82,7 +73,7 @@ function StarView({
   switch (viewType) {
     case "addition":
       return (
-        <div style={{ wordBreak: "break-all" }}>
+        <div style={{ wordBreak: "break-all", minHeight: 32 }}>
           {"⭐️".repeat(star)}
         </div>
       );
