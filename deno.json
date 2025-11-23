@@ -8,12 +8,9 @@
   },
   "tasks": {
     "client-build": "deno run --check --unstable-bundle --allow-read=./generated --allow-write=./generated ./clientBuild.ts",
-    "start-watch": "deno run --check --watch --unstable-raw-imports --allow-env --allow-net ./main.tsx",
-    "start-watch-tunnel": "deno run --tunnel --check --watch --unstable-raw-imports --allow-env --allow-net ./main.tsx",
-    "migrate": {
-      "description": "https://docs.deno.com/deploy/reference/databases/#migration-and-schema-management",
-      "command": "deno run --allow-net --allow-env --allow-read --allow-write npm:node-pg-migrate up"
-    }
+    "client-build-watch": "deno run --check --watch=./client --unstable-bundle --allow-read=./generated --allow-write=./generated ./clientBuild.ts",
+    "start-watch": "deno run --check --watch --allow-env --allow-net ./main.tsx",
+    "start-watch-tunnel": "deno run --tunnel --watch --check --allow-env --allow-net ./main.tsx"
   },
   "imports": {
     "@std/fs": "jsr:@std/fs@^1.0.20",
