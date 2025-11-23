@@ -1,4 +1,4 @@
-import { hydrateRoot } from "react-dom/client";
+import { render } from "hono/jsx/dom";
 import { App } from "./app.tsx";
 
-hydrateRoot(document.body, <App />);
+render(<App />, document.body);

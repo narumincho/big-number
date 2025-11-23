@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "hono/jsx";
 
 export function App() {
   const [star, setStar] = useState<number>(0);
@@ -9,21 +9,33 @@ export function App() {
   }, []);
 
   return (
-    <>
+    <body
+      style={{
+        display: "grid",
+        gap: 8,
+        margin: 0,
+        padding: 16,
+        gridTemplateRows: "auto auto auto 1fr",
+      }}
+    >
       <h1 style={{ margin: 0, padding: 8 }}>星を増やそうゲーム</h1>
       <div>とにかく⭐️を増やそう</div>
       <StarBoxView star={star} />
-      <button
-        type="button"
-        style={{ padding: 4 }}
-        disabled={!initialized}
-        onClick={() => {
-          setStar((prev) => prev + 1);
-        }}
-      >
-        ⭐️ ← ⭐️ + 1
-      </button>
-    </>
+      <div style={{ display: "grid", gridTemplateColumns: "auto 1fr" }}>
+        <div>🤖</div>
+        <button
+          type="button"
+          style={{ flexGrow: 1, padding: 4 }}
+          disabled={!initialized}
+          onClick={() => {
+            setStar((prev) => prev + 1);
+          }}
+        >
+          ⭐️ ← ⭐️ + 1
+        </button>
+      </div>
+      <div style={{}}></div>
+    </body>
   );
 }
 
@@ -49,7 +61,7 @@ function StarBoxView({ star }: { readonly star: number }) {
   );
 }
 
-function Chip({ children }: { readonly children: React.ReactNode }) {
+function Chip({ children }: PropsWithChildren<Record<never, never>>) {
   return (
     <div
       style={{

@@ -4,21 +4,18 @@
     "noUncheckedIndexedAccess": true,
     "lib": ["deno.ns", "deno.unstable", "dom"],
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "hono/jsx"
   },
   "tasks": {
-    "client-build": "deno run --check --unstable-bundle --allow-read=./client,./generated --allow-write=./generated --allow-env=NODE_ENV ./clientBuild.tsx",
+    "client-build": "deno run --check --unstable-bundle --allow-read=./client,./generated --allow-write=./generated ./clientBuild.tsx",
     "client-build-watch": "deno run --check --watch=./client --unstable-bundle --allow-read=./client,./generated --allow-write=./generated --allow-env=NODE_ENV ./clientBuild.tsx",
     "start-watch": "deno run --check --watch --allow-env --allow-net ./main.tsx"
   },
   "imports": {
     "@std/fs": "jsr:@std/fs@^1.0.20",
     "@types/pg": "npm:@types/pg@^8.15.6",
-    "@types/react": "npm:@types/react@^19.2.6",
-    "@types/react-dom": "npm:@types/react-dom@^19.2.3",
-    "pg": "npm:pg@^8.16.3",
-    "react": "npm:react@^19.2.0",
-    "react-dom": "npm:react-dom@^19.2.0"
+    "hono": "npm:hono@^4.10.6",
+    "pg": "npm:pg@^8.16.3"
   },
   "deploy": {
     "org": "narumincho",
