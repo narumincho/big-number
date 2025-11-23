@@ -23,14 +23,13 @@ async function clientBuild() {
     throw new Error("Client script not found in bundle output");
   }
 
-  await Deno.writeFile("./generated/clientScript.js", clientScript);
-
   await Deno.writeTextFile(
-    "./generated/hash.json",
+    "./generated/clientScript.json",
     JSON.stringify({
-      clientScriptHash: new Uint8Array(
+      hash: new Uint8Array(
         await crypto.subtle.digest("SHA-256", clientScript)
       ).toBase64(),
+      content: new TextDecoder().decode(clientScript),
     })
   );
 }
