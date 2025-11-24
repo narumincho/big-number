@@ -18,42 +18,6 @@ export function NumberView({
   readonly icon: string;
   readonly viewType: ViewType;
 }) {
-  switch (viewType) {
-    case "addition":
-      return (
-        <div
-          style={{ height: "100%", overflow: "hidden", position: "relative" }}
-        >
-          <div
-            style={{
-              wordBreak: "break-all",
-              height: "100%",
-              overflowY: "auto",
-            }}
-          >
-            {icon.repeat(value)}
-          </div>
-        </div>
-      );
-    case "multiple":
-      return (
-        <div style={{ textAlign: "right", height: "100%", overflowY: "auto" }}>
-          {value}
-          {icon}
-        </div>
-      );
-  }
-}
-
-export function NumberViewSvg({
-  value,
-  icon,
-  viewType,
-}: {
-  readonly value: number;
-  readonly icon: string;
-  readonly viewType: ViewType;
-}) {
   const ref = useRef<SVGSVGElement>(null);
   // const [prevViewType, setPrevViewType] = useRef<ViewType | null>(null);
 
@@ -92,7 +56,9 @@ export function NumberViewSvg({
           {viewType === "addition" && (
             <Addition icon={icon} value={value} width={width} height={height} />
           )}
-          {viewType === "multiple" && <Multiple icon={icon} value={value} />}
+          {viewType === "multiple" && (
+            <Multiple icon={icon} value={value} width={width} height={height} />
+          )}
         </svg>
       )}
     </div>
@@ -100,6 +66,8 @@ export function NumberViewSvg({
 }
 
 const iconSize = 22;
+
+const sampleCount = 3;
 
 function Addition(
   { icon, value, width, height }: {
@@ -109,35 +77,96 @@ function Addition(
     readonly height: number;
   },
 ) {
-  if (1000 < value) {
-    return <g></g>;
-  }
-  if (value * iconSize < width) {
+  const rowSize = Math.floor(width / iconSize);
+  const fullRowCount = Math.floor(value / rowSize);
+  const maxRowCount = Math.floor(height / iconSize);
+  const mod = value % rowSize;
+  const rowCount = fullRowCount + (mod === 0 ? 0 : 1);
+  const over = maxRowCount < rowCount;
+
+  if (over) {
     return (
       <g>
-        {Array.from({ length: value }).map((_, i) => (
+        {Array.from({ length: sampleCount + 2 }).map((_, i) => (
           <text
             key={i}
-            x={width / 2 + (i - (value - 1) / 2) * iconSize}
+            x={width / 2 + (i - (sampleCount + 2 - 1) / 2) * iconSize}
             y={height / 2}
             dominantBaseline="middle"
             textAnchor="middle"
+            fill="white"
           >
-            {icon}
+            {i === sampleCount ? "..." : icon}
           </text>
         ))}
+        <path
+          style={{
+            fill: "none",
+            stroke: "rgb(255, 255, 255)",
+            strokeDasharray: `${iconSize}, ${iconSize * 3}`,
+          }}
+          d={`M ${width / 2 - iconSize * 2} ${height / 2 + iconSize} C ${
+            width / 2 - iconSize * 2
+          } ${height / 2 + iconSize * 2}, ${width / 2 + iconSize * 2} ${
+            height / 2 + iconSize * 2
+          }, ${width / 2 + iconSize * 2} ${height / 2 + iconSize}`}
+        />
+        <text
+          x={width / 2}
+          y={height / 2 + iconSize * 2}
+          dominantBaseline="middle"
+          textAnchor="middle"
+          fill="white"
+        >
+          {value}
+        </text>
       </g>
     );
   }
   return (
-    <text>
-      {icon.repeat(value)}
-    </text>
+    <g>
+      {Array.from({ length: rowCount }).map(
+        (_, i) => {
+          const countInRow = (i === rowCount) ? mod : rowSize;
+          return (
+            <g key={i}>
+              {Array.from({ length: countInRow }).map((_, j) => (
+                <text
+                  key={j}
+                  x={width / 2 + (j - (countInRow - 1) / 2) * iconSize}
+                  y={height / 2 + (i - rowCount / 2) * iconSize}
+                  dominantBaseline="middle"
+                  textAnchor="middle"
+                >
+                  {icon}
+                </text>
+              ))}
+            </g>
+          );
+        },
+      )}
+    </g>
   );
 }
 
 function Multiple(
-  { icon, value }: { readonly icon: string; readonly value: number },
+  { icon, value, width, height }: {
+    readonly icon: string;
+    readonly value: number;
+    readonly width: number;
+    readonly height: number;
+  },
 ) {
-  return <text>{value}{icon}</text>;
+  return (
+    <text
+      x={width / 2}
+      y={height / 2}
+      dominantBaseline="middle"
+      textAnchor="middle"
+      fill="white"
+    >
+      {value}
+      {icon}
+    </text>
+  );
 }
