@@ -8,10 +8,43 @@ export function App() {
   const [itemCounts, setItemCounts] = useState<ReadonlyArray<number>>([]);
   const [initialized, setInitialized] = useState(false);
   const [tab, setTab] = useState<"items" | "achievements">("items");
+  const STORAGE_KEY = "big-number:state";
 
   useEffect(() => {
+    // Load saved state from localStorage (if available), then mark initialized.
+    if (typeof window === "undefined") {
+      setInitialized(true);
+      return;
+    }
+
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.itemCounts)) {
+          setItemCounts(parsed.itemCounts.map((v: unknown) => Number(v)));
+        }
+        if (parsed && typeof parsed.star === "number") {
+          setStar(parsed.star);
+        }
+      }
+    } catch (_e) {
+      // ignore parse errors
+    }
+
     setInitialized(true);
   }, []);
+
+  // Persist state when itemCounts or star change.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const payload = { itemCounts: Array.from(itemCounts), star };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch (_e) {
+      // ignore storage errors (e.g., quota)
+    }
+  }, [itemCounts, star]);
 
   useEffect(() => {
     const recalc = () => {
@@ -22,7 +55,7 @@ export function App() {
           if (!item) continue;
           s = item.operation(s, itemCounts[i] ?? 0);
         }
-        return s;
+        return Math.floor(s);
       });
     };
 

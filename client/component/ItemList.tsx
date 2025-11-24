@@ -16,7 +16,7 @@ export const items: ReadonlyArray<Item> = [
   },
   {
     icon: "💧",
-    cost: (count) => 1000 + count * 1000,
+    cost: (count) => 300 + count * 300,
     operationLabel: "⭐️ x (1 + (0.01 x 💧))",
     operation: (star, count) => star * (1 + (0.01 * count)),
   },
