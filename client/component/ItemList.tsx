@@ -1,10 +1,35 @@
 import { calcAutoViewType, NumberView } from "./NumberView.tsx";
 
+export type Item = {
+  readonly icon: string;
+  readonly cost: (count: number) => number;
+  readonly operationLabel: string;
+  readonly operation: (star: number, count: number) => number;
+};
+
+export const items: ReadonlyArray<Item> = [
+  {
+    icon: "🌱",
+    cost: (count) => count * 10,
+    operationLabel: "⭐️ + 🌱",
+    operation: (star, count) => star + count,
+  },
+  {
+    icon: "💧",
+    cost: (count) => 1000 + count * 1000,
+    operationLabel: "⭐️ x (1 + (0.01 x 💧))",
+    operation: (star, count) => star * (1 + (0.01 * count)),
+  },
+];
+
 export function ItemList(
-  { leaf, setLeaf, star }: {
-    leaf: number;
-    setLeaf: (fn: (prev: number) => number) => void;
+  { itemCounts, setItemCounts, star, setStar }: {
+    itemCounts: ReadonlyArray<number>;
+    setItemCounts: (
+      fn: (prev: ReadonlyArray<number>) => ReadonlyArray<number>,
+    ) => void;
     star: number;
+    setStar: (fn: (prev: number) => number) => void;
   },
 ) {
   return (
@@ -15,20 +40,24 @@ export function ItemList(
         alignContent: "start",
       }}
     >
-      <Item
-        icon="🌱"
-        cost={0}
-        count={leaf}
-        operation="⭐️ + 1"
-        onBuy={() => setLeaf((prev) => prev + 1)}
-      />
-      <Item
-        icon="💧"
-        cost={1000}
-        count={0}
-        operation="⭐️ x 1.01"
-        onBuy={() => {}}
-      />
+      {items.map((item, index) => (
+        <Item
+          key={item.icon}
+          icon={item.icon}
+          cost={item.cost(itemCounts[index] ?? 0)}
+          count={itemCounts[index] ?? 0}
+          operation={item.operationLabel}
+          star={star}
+          onBuy={() => {
+            setItemCounts((prev) => {
+              const newCounts = [...prev];
+              newCounts[index] = (newCounts[index] ?? 0) + 1;
+              return newCounts;
+            });
+            setStar((prev) => prev - item.cost(itemCounts[index] ?? 0));
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -39,13 +68,15 @@ function Item(
     cost,
     count,
     operation,
+    star,
     onBuy,
   }: {
     readonly icon: string;
     readonly cost: number;
     readonly count: number;
-    readonly onBuy: () => void;
+    readonly star: number;
     readonly operation: string;
+    readonly onBuy: () => void;
   },
 ) {
   return (
@@ -68,6 +99,7 @@ function Item(
       <button
         type="button"
         style={{ flexGrow: 1, padding: 4 }}
+        disabled={cost > star}
         onClick={onBuy}
       >
         <div>
