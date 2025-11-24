@@ -3,9 +3,6 @@ import { Hono } from "hono";
 import clientScript from "./generated/clientScript.json" with { type: "json" };
 import iconPng from "./generated/iconPng.json" with { type: "json" };
 import iconSvg from "./generated/iconSvg.json" with { type: "json" };
-import { Pool } from "pg";
-
-const pool = new Pool();
 
 function Html() {
   return (
@@ -56,13 +53,6 @@ app.get(`/script`, (c) => {
   return c.body(clientScript.content, {
     headers: { "content-type": "application/javascript" },
   });
-});
-
-app.post("/test-db", async (c) => {
-  const result = await pool.query("select * From version()");
-  console.log(result.rows);
-
-  return c.text("OK");
 });
 
 app.get(`/icon.${iconPng.hash}.png`, (c) => {
