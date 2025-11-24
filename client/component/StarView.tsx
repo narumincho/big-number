@@ -7,30 +7,72 @@ export function StarView(
   const [viewTypeState, setViewType] = useState<ViewType>("addition");
 
   return (
-    <div>
+    <div
+      style={{
+        height: "100%",
+        display: "grid",
+        gridTemplateRows: "auto 1fr",
+        gap: 8,
+      }}
+    >
       <div style={{ minHeight: 34 }}>
         {star > 2 && (
-          <div style={{ display: "flex", gap: "8px" }}>
-            <Chip>🔲🔲🔲</Chip>
-            <Chip>123</Chip>
-          </div>
+          <ViewTypeSelector
+            value={viewTypeState}
+            onChange={(vt) => {
+              setViewType(vt);
+            }}
+          />
         )}
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <NumberView value={star} icon="⭐" viewType={viewTypeState} />
-      </div>
+      <NumberView value={star} icon="⭐" viewType={viewTypeState} />
     </div>
   );
 }
 
-function Chip({ children }: PropsWithChildren<Record<never, never>>) {
+function ViewTypeSelector(
+  {
+    value,
+    onChange,
+  }: { value: ViewType; onChange: (viewType: ViewType) => void },
+) {
+  return (
+    <div style={{ display: "flex", gap: "8px" }}>
+      <Chip
+        active={value === "addition"}
+        onClick={() => {
+          onChange("addition");
+        }}
+      >
+        🔲🔲🔲
+      </Chip>
+      <Chip
+        active={value === "multiple"}
+        onClick={() => {
+          onChange("multiple");
+        }}
+      >
+        123
+      </Chip>
+    </div>
+  );
+}
+
+function Chip(
+  { active, onClick, children }: PropsWithChildren<
+    { active: boolean; onClick: () => void }
+  >,
+) {
   return (
     <div
       style={{
         padding: "4px 8px",
         borderRadius: "16px",
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        backgroundColor: active
+          ? "rgba(255, 255, 255, 0.2)"
+          : "rgba(255, 255, 255, 0.1)",
       }}
+      onClick={onClick}
     >
       {children}
     </div>

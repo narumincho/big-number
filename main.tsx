@@ -1,8 +1,8 @@
-import { App } from "./client/component/App.tsx";
 import { Hono } from "hono";
 import clientScript from "./generated/clientScript.json" with { type: "json" };
 import iconPng from "./generated/iconPng.json" with { type: "json" };
 import iconSvg from "./generated/iconSvg.json" with { type: "json" };
+import { Title } from "./client/component/Title.tsx";
 
 function Html() {
   return (
@@ -34,8 +34,19 @@ function Html() {
 `}
         </style>
       </head>
-      <body style={{ height: "100%" }}>
-        <App />
+      <body style={{ height: "100%", margin: 0 }}>
+        <div
+          style={{
+            height: "100%",
+            display: "grid",
+            gap: 8,
+            margin: 0,
+            gridTemplateRows: "auto  1fr auto 1fr",
+          }}
+        >
+          <Title />
+          <noscript>JavaScript is required to play this game.</noscript>
+        </div>
       </body>
     </html>
   );

@@ -2,6 +2,7 @@ import { PropsWithChildren, useEffect, useState } from "hono/jsx";
 import { ItemList } from "./ItemList.tsx";
 import { StarView } from "./StarView.tsx";
 import { GitHubIcon } from "./GitHubIcon.tsx";
+import { Title } from "./Title.tsx";
 
 export function App() {
   const [star, setStar] = useState<number>(0);
@@ -29,16 +30,10 @@ export function App() {
         display: "grid",
         gap: 8,
         margin: 0,
-        gridTemplateRows: "auto auto 1fr auto 1fr",
+        gridTemplateRows: "auto  1fr auto 1fr",
       }}
     >
-      <h1 style={{ margin: 0, padding: 8 }}>
-        星を増やそうゲーム{" "}
-        <a href="https://github.com/narumincho/big-number">
-          <GitHubIcon />
-        </a>
-      </h1>
-      <div style={{ padding: 8 }}>とにかく⭐️を増やそう</div>
+      <Title />
       <StarView star={star} />
       <div role="tablist" style={{ display: "grid", gridAutoFlow: "column" }}>
         <Tab

@@ -1,3 +1,5 @@
+import { calcAutoViewType, NumberView } from "./NumberView.tsx";
+
 export function ItemList(
   { leaf, setLeaf, star }: {
     leaf: number;
@@ -50,13 +52,16 @@ function Item(
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "auto auto auto 1fr",
+        gridTemplateColumns: "auto auto 1fr",
         alignItems: "center",
         gap: 8,
       }}
     >
-      {count}
-      <div>{icon}</div>
+      <NumberView
+        value={count}
+        icon={icon}
+        viewType={calcAutoViewType(count)}
+      />
       <div style={{ display: "flex" }}>
         {operation}
       </div>
