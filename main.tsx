@@ -1,4 +1,4 @@
-import { App } from "./client/app.tsx";
+import { App } from "./client/component/App.tsx";
 import { Hono } from "hono";
 import clientScript from "./generated/clientScript.json" with { type: "json" };
 import iconPng from "./generated/iconPng.json" with { type: "json" };
@@ -6,7 +6,7 @@ import iconSvg from "./generated/iconSvg.json" with { type: "json" };
 
 function Html() {
   return (
-    <html>
+    <html style={{ height: "100%" }}>
       <head>
         <title>星を増やそうゲーム</title>
         <meta charSet="utf-8" />
@@ -34,7 +34,9 @@ function Html() {
 `}
         </style>
       </head>
-      <App />
+      <body style={{ height: "100%" }}>
+        <App />
+      </body>
     </html>
   );
 }
