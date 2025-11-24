@@ -80,20 +80,55 @@ export function NumberViewSvg({
   });
 
   return (
-    <svg
+    <div
       ref={ref}
-      style={{ width: "100%", height: "100%", display: "block" }}
-      {...(width && height ? { viewBox: `0 0 ${width} ${height}` } : {})}
+      style={{ overflow: "hidden" }}
     >
-      {viewType === "addition" && <Addition icon={icon} value={value} />}
-      {viewType === "multiple" && <Multiple icon={icon} value={value} />}
-    </svg>
+      {width && height && (
+        <svg
+          style={{ display: "block" }}
+          viewBox={`0 0 ${width} ${height}`}
+        >
+          {viewType === "addition" && (
+            <Addition icon={icon} value={value} width={width} height={height} />
+          )}
+          {viewType === "multiple" && <Multiple icon={icon} value={value} />}
+        </svg>
+      )}
+    </div>
   );
 }
 
+const iconSize = 22;
+
 function Addition(
-  { icon, value }: { readonly icon: string; readonly value: number },
+  { icon, value, width, height }: {
+    readonly icon: string;
+    readonly value: number;
+    readonly width: number;
+    readonly height: number;
+  },
 ) {
+  if (1000 < value) {
+    return <g></g>;
+  }
+  if (value * iconSize < width) {
+    return (
+      <g>
+        {Array.from({ length: value }).map((_, i) => (
+          <text
+            key={i}
+            x={width / 2 + (i - (value - 1) / 2) * iconSize}
+            y={height / 2}
+            dominantBaseline="middle"
+            textAnchor="middle"
+          >
+            {icon}
+          </text>
+        ))}
+      </g>
+    );
+  }
   return (
     <text>
       {icon.repeat(value)}
